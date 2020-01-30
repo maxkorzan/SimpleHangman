@@ -6,87 +6,82 @@ public class Main {
 
         ArrayList<String> words = new ArrayList<>();
 
-        Collections.addAll(words, "tree","rain","bear", "encourage",
-                "promise","soup","chess","insurance","pancakes","stream");
+        Collections.addAll(words, "tree", "rain", "bear", "encourage",
+                "promise", "soup", "chess", "insurance", "pancakes", "stream");
 
         //randomly choose a word to guess
         String word = words.get(randomNumber(words.size()));
-        char[] wordArray = word.toCharArray();
-        char[] answerArray = wordArray;
-        int attempts=0;
-        int attemptsLimit=6;
+        char[] answerArray = word.toCharArray();
+        int attempts = 0;
+        int attemptsLimit = 6;
 
-        //test wordArray
-        for(char c : wordArray){
+//        ONLY FOR TESTING: show wordArray
+//        for(char c : wordArray){
+//            System.out.print(c + " ");
+//        }
+//        System.out.println();
+
+        //create blank array
+        char[] blankArray = new char[answerArray.length];
+        for (int i = 0; i < blankArray.length; i++) {
+            blankArray[i] = '_';
+        }
+
+        //welcome
+        System.out.println("Welcome, let's play hangman!");
+        System.out.print("Here is the word I am thinking of: ");
+        for (char c : blankArray) {
             System.out.print(c + " ");
         }
         System.out.println();
 
-        //create blank array
-        char[] blankArray = new char[wordArray.length];
-        for(int i=0; i<blankArray.length; i++) {
-            blankArray[i] = '_';
-        }
-
-        System.out.println("Welcome, let's play hangman!");
-        System.out.print("Here is the word I am thinking of: ");
-        for(char c : blankArray){
-            System.out.print(c+" ");
-        }
-        System.out.println();
-
-
-        while(!Arrays.equals(blankArray, answerArray) && attempts<attemptsLimit){
+        //get guesses from user
+        while (!Arrays.equals(blankArray, answerArray) && attempts < attemptsLimit) {
 
             System.out.print("Enter your guess: ");
             String guess = sc.next();
             char[] guessArray = guess.toCharArray();
 
             System.out.print("Your guess so far: ");
-            for (int i=0; i < guessArray.length; i++) {
-                for (int j=0; j < answerArray.length; j++) {
-                    if (guessArray[i]==answerArray[j]) {
-                        blankArray[j] =answerArray[j];
+            for (int i = 0; i < guessArray.length; i++) {
+                boolean wrongLetter = true;
+
+                //fill in correctly guessed blanks
+                for (int j = 0; j < answerArray.length; j++) {
+                    if (guessArray[i] == answerArray[j]) {
+                        blankArray[j] = answerArray[j];
+                        wrongLetter = false;
                     }
                 }
-
-
-//                for(char c: guessArray){
-//                    if(c.equals(answerArray[i])){
-//                        //return true;
-//                }
-//                //return false;
-//
-//                if(!answerArray.contains(guessArray[i]) {
-//                    attempts += 1;
-//                }
+                //count incorrect guesses
+                if (wrongLetter) {
+                    attempts++;
+                }
             }
-            for(char c : blankArray){
+            //display guessed letters so far
+            for (char c : blankArray) {
                 System.out.print(c + " ");
             }
             System.out.println();
-
-
-            System.out.println("You have guessed incorrectly "+attempts+"/"+attemptsLimit+" times");
+            System.out.println("You have guessed incorrectly " + attempts + "/" + attemptsLimit + " times");
 
         }
-
-        System.out.println("Congratulations! You guessed the word");
+        //if user guessed the word
+        if(attempts<attemptsLimit) {
+            System.out.println("Congratulations! You guessed the word");
+        }
+        //if user guessed incorrectly
+        else {
+            System.out.println("Sorry, you have guessed incorrectly too many times.");
+            System.out.println("The answer was: "+word);
+        }
 
     }
 
     //random number generator
-    public static int randomNumber(int x){
+    public static int randomNumber(int x) {
         Random rand = new Random();
         int randnum = rand.nextInt(x);
         return randnum;
     }
-
-//    for(Char c: arr){
-//        if(s.equals(targetValue))
-//            return true;
-//    }
-//	return false;
-
-
 }
